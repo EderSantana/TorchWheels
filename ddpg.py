@@ -129,12 +129,14 @@ def playGame(train_indicator=1):  # 1: Train, 0: Test
 
                 # Train critic
                 critic_opt.zero_grad()
-                actor_opt.zero_grad()
-                out = critic.forward(states_c, actions_c)
+                out = critic(states_c, actions_c)
                 LOSS = F.mse_loss(out, y_t)
                 LOSS.backward()
                 critic_opt.step()
-                REWARD = -F.mean(out)
+
+                actor_opt.zero_grad()
+                out = critic(states_c, actions_c)
+                REWARD = -torch.mean(out)
                 REWARD.backward()
                 loss += LOSS.data[0] 
                 train_critic_target(critic, critic_target)
