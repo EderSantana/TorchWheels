@@ -162,7 +162,7 @@ def playGame(train_indicator=1):  # 1: Train, 0: Test
                 torch.save(critic_target.state_dict(), 'critictarget.h5')
 
         print("Total Reward @ {}-th episode: {}".format(i, total_reward))
-        print("Total Step: {}".format(ste))
+        print("Total Step: {}".format(step))
         print("")
 
     env.end()
