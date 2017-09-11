@@ -119,7 +119,12 @@ def playGame(train_indicator=1):  # 1: Train, 0: Test
             target_q_values = critic_target(new_states, target_a_values)
 
             target_q_values = target_q_values.cpu().data.numpy()
-            y_t = rewards[:, None] + (1-dones[:, None]) * (GAMMA * target_q_values)
+            for k in range(len(batch)):
+                if dones[k]:
+                    y_t[k] = rewards[k]
+                else:
+                    y_t[k] = rewards[k] + GAMMA*target_q_values[k]
+
             y_t = Variable(torch.from_numpy(y_t.astype('float32')).cuda())
 
             if train_indicator:
